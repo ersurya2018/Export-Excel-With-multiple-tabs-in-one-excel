@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+@{
+    if (@TempData["error"] != null)
+    {
+        <div class="alert alert-warning" role="alert">@TempData["error"]</div>
+    }
+}
+
+<a class="btn btn-info" asp-action="Export" asp-controller="Home">Export Excel</a>
+&nbsp;&nbsp;||&nbsp;&nbsp;
+
+<a class="btn btn-info" asp-action="ExportExcelMuSheet" asp-controller="Home">Export Excel with multiplesheet in one excel</a>
+
+&nbsp;&nbsp;||&nbsp;&nbsp;
+
+<a class="btn btn-info" asp-action="ExportExcelMuSheet2" asp-controller="Home">Export Excel with multiplesheet in one excel2</a>

@@ -1,4 +1,17 @@
-﻿<form method="post" enctype="multipart/form-data" action="/ImportExcel/Upload">
+﻿
+
+
+<form method="post" enctype="multipart/form-data" action="/ImportExcel/Upload">
+    <div class="form-group">
+        <label for="file">Excel File</label>
+        <input type="file" name="file" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>
+
+
+<hr/>
+<form method="post" enctype="multipart/form-data" action="/ImportExcel/ImportExcel">
     <div class="form-group">
         <label for="file">Excel File</label>
         <input type="file" name="file" class="form-control" />

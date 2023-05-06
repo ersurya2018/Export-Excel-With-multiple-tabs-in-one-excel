@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ExcelDownload1.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using System;
@@ -44,5 +45,38 @@ namespace ExcelDownload1.Controllers
 
             return View();
         }
+
+        [HttpPost]
+        public IActionResult ImportExcel(IFormFile file)
+        {
+            var excelData = new List<ExcelData>();
+
+            using (var package = new ExcelPackage(file.OpenReadStream()))
+            {
+                foreach (var worksheet in package.Workbook.Worksheets)
+                {
+                    var rows = new List<RowData>();
+
+                    for (int row = 2; row <= worksheet.Dimension.Rows; row++)
+                    {
+                        rows.Add(new RowData
+                        {
+                            SID = worksheet.Cells[row, 1].Value?.ToString(),
+                            SName = worksheet.Cells[row, 2].Value?.ToString(),
+                            // map more columns as needed
+                        });
+                    }
+
+                    excelData.Add(new ExcelData
+                    {
+                        SheetName = worksheet.Name,
+                        Rows = rows
+                    });
+                }
+            }
+
+            return View(excelData);
+        }
+
     }
 }

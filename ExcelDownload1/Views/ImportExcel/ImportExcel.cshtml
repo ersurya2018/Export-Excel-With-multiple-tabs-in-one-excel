@@ -1,0 +1,32 @@
+﻿@model List<ExcelData>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Sheet Name</th>
+            <th>Column 1</th>
+            <th>Column 2</th>
+            <!-- add more headers as needed -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sheet in Model)
+        {
+            <tr>
+                <td>@sheet.SheetName</td>
+                <td></td>
+                <td></td>
+                <!-- add more cells as needed -->
+            </tr>
+            foreach (var row in sheet.Rows)
+            {
+                <tr>
+                    <td></td>
+                    <td>@row.SID</td>
+                    <td>@row.SName</td>
+                    <!-- add more cells as needed -->
+                </tr>
+            }
+        }
+    </tbody>
+</table>

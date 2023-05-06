@@ -5364,11 +5364,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Administrator\\source\\repos\\ExcelDownload1\\ExcelDownload1\\ExcelDownload1.csproj",
+      "projectUniqueName": "D:\\SelfProject\\Export-Excel-With-multiple-tabs-in-one-excel\\ExcelDownload1\\ExcelDownload1.csproj",
       "projectName": "ExcelDownload1",
-      "projectPath": "C:\\Users\\Administrator\\source\\repos\\ExcelDownload1\\ExcelDownload1\\ExcelDownload1.csproj",
+      "projectPath": "D:\\SelfProject\\Export-Excel-With-multiple-tabs-in-one-excel\\ExcelDownload1\\ExcelDownload1.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Administrator\\source\\repos\\ExcelDownload1\\ExcelDownload1\\obj\\",
+      "outputPath": "D:\\SelfProject\\Export-Excel-With-multiple-tabs-in-one-excel\\ExcelDownload1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",

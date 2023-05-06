@@ -27,6 +27,7 @@ namespace ExcelDownload1.Controllers
         {
             return View();
         }
+        //here we Export the single excel file
         public IActionResult Export()
         {
             try
@@ -53,6 +54,7 @@ namespace ExcelDownload1.Controllers
             }
             return RedirectToAction("Index");
         }
+        //This is Student list
         public List<Student> studentdata()
         {
             List<Student> data = new List<Student>()
@@ -65,6 +67,7 @@ namespace ExcelDownload1.Controllers
             return data;
             
         }
+        //This is Employee list
         public List<Employee> Employeedata()
         {
             List<Employee> data = new List<Employee>()
@@ -77,6 +80,7 @@ namespace ExcelDownload1.Controllers
             return data;
 
         }
+        //Here we convert the list data in datatable 
         public DataTable ToDataTable<T>(List<T> items)
         {
             DataTable dataTable = new DataTable(typeof(T).Name);
@@ -100,6 +104,8 @@ namespace ExcelDownload1.Controllers
             //put a breakpoint here and check datatable
             return dataTable;
         }
+
+        //using this section Export excel with multipule tabs in single file by using the static data
         public IActionResult ExportExcelMuSheet()
         {
             // Create a new Excel package
@@ -156,7 +162,7 @@ namespace ExcelDownload1.Controllers
                 return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
             }
         }
-
+        //This is the final Export Excel with multipule tabs in the singale excel file with the database. 
         public IActionResult ExportExcelMuSheet2()
         {
             var Studentdata = studentdata().ToList();

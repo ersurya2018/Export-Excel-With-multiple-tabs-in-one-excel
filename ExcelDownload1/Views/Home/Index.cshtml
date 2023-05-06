@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -21,3 +22,13 @@
 &nbsp;&nbsp;||&nbsp;&nbsp;
 
 <a class="btn btn-info" asp-action="ExportExcelMuSheet2" asp-controller="Home">Export Excel with multiplesheet in one excel2</a>
+
+<hr />
+<form method="post" enctype="multipart/form-data" action="/Home/ImportExcel">
+    <input type="file" name="file" />
+    <button type="submit">Import Excel</button>
+</form>
+
+<hr />
+
+

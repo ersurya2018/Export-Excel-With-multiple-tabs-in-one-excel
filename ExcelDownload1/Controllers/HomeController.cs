@@ -1,8 +1,11 @@
 ﻿using ClosedXML.Excel;
 using ExcelDownload1.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
+using OfficeOpenXml.Table;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,6 +19,12 @@ namespace ExcelDownload1.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IWebHostEnvironment _environment;
+
+        public HomeController(IWebHostEnvironment environment)
+        {
+            _environment = environment;
+        }
 
         public IActionResult Index()
         {
@@ -33,12 +42,12 @@ namespace ExcelDownload1.Controllers
             try
             {
                 var data = Employeedata();
-                if(data!=null && data.Count>0)
+                if (data != null && data.Count > 0)
                 {
-                    using(XLWorkbook wb=new XLWorkbook())
+                    using (XLWorkbook wb = new XLWorkbook())
                     {
                         wb.Worksheets.Add(ToDataTable(data.ToList()));
-                        using(MemoryStream strem=new MemoryStream())
+                        using (MemoryStream strem = new MemoryStream())
                         {
                             wb.SaveAs(strem);
                             string filename = $"Customer_{DateTime.Now.ToString("dd/mm/yyyy")}.xlsx";
@@ -48,7 +57,7 @@ namespace ExcelDownload1.Controllers
                 }
                 TempData["error"] = "Data not found";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -65,7 +74,7 @@ namespace ExcelDownload1.Controllers
                 new Student(){SID=4,Name="singh",Email="singh@gmail.com",Age=42,Phone="23678"},
             };
             return data;
-            
+
         }
         //This is Employee list
         public List<Employee> Employeedata()
@@ -80,6 +89,16 @@ namespace ExcelDownload1.Controllers
             return data;
 
         }
+        public List<MyClass> MyClassData()
+        {
+            List<MyClass> data = new List<MyClass>()
+            {
+                new MyClass(){ Id = "123", Name = "Item 1", Number = 3},
+                new MyClass(){ Id = "456", Name = "Item 2", Number = 6}
+            };
+            return data;
+        }
+
         //Here we convert the list data in datatable 
         public DataTable ToDataTable<T>(List<T> items)
         {
@@ -117,7 +136,7 @@ namespace ExcelDownload1.Controllers
 
                 // Add data to the worksheets
                 var SData = studentdata();
-                var tabledata=ToDataTable(SData.ToList());
+                var tabledata = ToDataTable(SData.ToList());
                 var EData = Employeedata();
 
                 sheet1.Cells["A1"].Value = "Name";
@@ -167,18 +186,58 @@ namespace ExcelDownload1.Controllers
         {
             var Studentdata = studentdata().ToList();
             var Empdata = Employeedata().ToList();
+            var MyClassdata = MyClassData().ToList();
+
 
             var package = new ExcelPackage();
             var StudentSheet = package.Workbook.Worksheets.Add("Greviance with policy no.");
             var EmpSheet = package.Workbook.Worksheets.Add("Greviance without policy no.");
+            var MyClassSheet = package.Workbook.Worksheets.Add("Surya Sheet");
             // Populate each sheet with data
-            StudentSheet.Cells["A1"].LoadFromCollection(Studentdata, true);
+            StudentSheet.Cells["A1"].LoadFromCollection(Studentdata, true, TableStyles.Dark2);
             EmpSheet.Cells["A1"].LoadFromCollection(Empdata, true);
+            MyClassSheet.Cells["B2"].LoadFromCollection(MyClassdata, true);
 
             // Save the Excel file
             byte[] excelBytes = package.GetAsByteArray();
             string filename = $"Customer_{DateTime.Now.ToString("dd/mm/yyyy")}.xlsx";
             return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "mydata.xlsx");
+        }
+
+        [HttpPost]
+        public IActionResult ImportExcel(IFormFile file)
+        {
+            var fileName = $"{_environment.WebRootPath}\\{file.FileName}";
+            var filePath = Path.Combine(_environment.WebRootPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            using (var package = new ExcelPackage(new FileInfo(filePath)))
+            {
+                var worksheet = package.Workbook.Worksheets.FirstOrDefault();
+
+                if (worksheet == null)
+                {
+                    return BadRequest("Worksheet not found");
+                }
+
+                var rows = worksheet.Dimension.Rows;
+                var list = new List<string>();
+
+                for (int i = 1; i <= rows; i++)
+                {
+                    var value = worksheet.Cells[i, 1].Value?.ToString();
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        list.Add(value);
+                    }
+                }
+
+                return View(list);
+            }
         }
     }
 }
